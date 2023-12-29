@@ -63,14 +63,24 @@ const Nav = () => {
                 <hr className="w-full h-1 bg-slate-900 m-1" />
                 <div>
                   {isLoggedIn ? (
-                    <Link href={""}>
-                      <button
-                        type="button"
-                        className="bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-600 hover:from-indigo-600 hover:via-indigo-400 hover:to-indigo-300 text-lg px-4 py-2 rounded-3xl text-white"
-                      >
-                        Profile
-                      </button>
-                    </Link>
+                    <div className="flex flex-col justify-between items-center gap-2">
+                      <Link href={""}>
+                        <button
+                          type="button"
+                          className="bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-600 hover:from-indigo-600 hover:via-indigo-400 hover:to-indigo-300 text-lg px-4 py-2 rounded-3xl text-white"
+                        >
+                          Profile
+                        </button>
+                      </Link>
+                      <Link href={""}>
+                        <button
+                          type="button"
+                          className="bg-gradient-to-r from-pink-300 via-pink-400 to-pink-600 hover:from-pink-600 hover:via-pink-400 hover:to-pink-300 text-lg px-4 py-2 rounded-3xl text-white"
+                        >
+                          Sign out
+                        </button>
+                      </Link>
+                    </div>
                   ) : (
                     <Link href={""}>
                       <button
@@ -106,14 +116,24 @@ const Nav = () => {
             })}
           </div>
           {isLoggedIn ? (
-            <Link href={""}>
-              <button
-                type="button"
-                className="bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-600 hover:from-indigo-600 hover:via-indigo-400 hover:to-indigo-300 text-lg px-4 py-2 rounded-3xl text-white"
-              >
-                Profile
-              </button>
-            </Link>
+            <div className="flex flex-row items-center justify-between gap-2">
+              <Link href={""}>
+                <button
+                  type="button"
+                  className="bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-600 hover:from-indigo-600 hover:via-indigo-400 hover:to-indigo-300 text-lg px-4 py-2 rounded-3xl text-white"
+                >
+                  Profile
+                </button>
+              </Link>
+              <Link href={""}>
+                <button
+                  type="button"
+                  className="bg-gradient-to-r from-pink-300 via-pink-400 to-pink-600 hover:from-pink-600 hover:via-pink-400 hover:to-pink-300 text-lg px-4 py-2 rounded-3xl text-white"
+                >
+                  Sign out
+                </button>
+              </Link>
+            </div>
           ) : (
             <Link href={""}>
               <button

@@ -22,7 +22,8 @@ const Home = () => {
           <span className="text-blue-800 font-semibold text-sm">
             Tailwind CSS.
           </span>{" "}
-          Just Log in and get started!
+          Just Log in and get started! Use it anywhere you want, you only need a
+          WEB BROWSER.
         </p>
       </section>
     </>
