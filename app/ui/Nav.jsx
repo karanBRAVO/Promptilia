@@ -12,6 +12,8 @@ import {
 } from "react-icons/gr";
 import { PiHamburgerFill } from "react-icons/pi";
 import { IoIosCloseCircle } from "react-icons/io";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 const socialIcons = [
   { socialIcon: GrGithub, href: "" },
@@ -22,12 +24,19 @@ const socialIcons = [
 ];
 
 const Nav = () => {
+  const pathname = usePathname();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [toggleMenu, setToggleMenu] = useState(false);
 
   return (
     <>
-      <nav className="p-8 font-black text-base flex items-center flex-row justify-between">
+      <nav
+        className={clsx(
+          "p-8 font-black text-base flex items-center flex-row justify-between",
+          { hidden: pathname === "/user/auth" }
+        )}
+      >
         <div className="flex flex-row items-center justify-center text-lg font-black bg-[#80808041] rounded-full p-2 sm:rounded-3xl cursor-pointer">
           <Image
             src={"/logo/star.svg"}
@@ -82,7 +91,7 @@ const Nav = () => {
                       </Link>
                     </div>
                   ) : (
-                    <Link href={""}>
+                    <Link href={"/user/auth"}>
                       <button
                         type="button"
                         className="bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600 hover:from-blue-600 hover:via-blue-400 hover:to-blue-300 text-lg px-4 py-2 rounded-3xl text-white"
@@ -135,7 +144,7 @@ const Nav = () => {
               </Link>
             </div>
           ) : (
-            <Link href={""}>
+            <Link href={"/user/auth"}>
               <button
                 type="button"
                 className="bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600 hover:from-blue-600 hover:via-blue-400 hover:to-blue-300 text-lg px-4 py-2 rounded-3xl text-white"
