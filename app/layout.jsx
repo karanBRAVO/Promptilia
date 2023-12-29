@@ -1,4 +1,5 @@
 import "@styles/globals.css";
+import Nav from "@app/ui/Nav";
 
 export const metadata = {
   title: "Promptilia",
@@ -8,7 +9,10 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Nav />
+        {children}
+      </body>
     </html>
   );
 };
