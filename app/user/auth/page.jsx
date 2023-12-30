@@ -2,6 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
+import { BsGithub } from "react-icons/bs";
+
+const providers = [
+  { name: "Google", icon: FcGoogle },
+  { name: "Github", icon: BsGithub },
+];
 
 const SignIn = () => {
   const router = useRouter();
@@ -153,7 +160,20 @@ const SignIn = () => {
             <hr className="w-full h-[2.1px] bg-black" />
           </div>
         </div>
-        {/* Providers */}
+        <div className="flex items-center justify-evenly flex-col md:flex-row">
+          {providers.map((provider, index) => {
+            return (
+              <div
+                key={index}
+                className="flex flex-row rounded-lg shadow-lg items-center justify-center px-4 py-3 m-2 text-black font-medium bg-gradient-to-tl hover:bg-gradient-to-b from-slate-500 via-zinc-100 to-zinc-200 cursor-pointer space-x-1"
+              >
+                <provider.icon className="text-2xl mx-1" />
+                <span>Continue with</span>
+                <span>{provider.name}</span>
+              </div>
+            );
+          })}
+        </div>
       </section>
     </>
   );
