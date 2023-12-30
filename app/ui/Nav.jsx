@@ -33,21 +33,23 @@ const Nav = () => {
     <>
       <nav
         className={clsx(
-          "p-8 font-black text-base flex items-center flex-row justify-between",
+          "p-8 font-black text-base flex items-center flex-row justify-between lg:justify-around w-full",
           { hidden: pathname === "/user/auth" }
         )}
       >
-        <div className="flex flex-row items-center justify-center text-lg font-black bg-[#80808041] rounded-full p-2 sm:rounded-3xl cursor-pointer">
-          <Image
-            src={"/logo/star.svg"}
-            width={37}
-            height={37}
-            alt="Promptilia"
-            className="p-1"
-            draggable={false}
-          />
-          Promptilia
-        </div>
+        <Link href={"/"}>
+          <div className="flex flex-row items-center justify-center text-lg font-black bg-[#80808041] rounded-full p-2 sm:rounded-3xl cursor-pointer">
+            <Image
+              src={"/logo/star.svg"}
+              width={37}
+              height={37}
+              alt="Promptilia"
+              className="p-1"
+              draggable={false}
+            />
+            Promptilia
+          </div>
+        </Link>
 
         {/* Mobile View */}
         <div>

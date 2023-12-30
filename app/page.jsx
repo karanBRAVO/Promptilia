@@ -1,8 +1,10 @@
+import Search from "./ui/Search";
+
 const Home = () => {
   return (
     <>
       <section className="bg-gradient-to-t from-indigo-950 w-full min-h-screen flex flex-col items-center">
-        <h1 className="text-black text-7xl sm:text-9xl font-black flex flex-col items-center justify-between p-3 bg-gradient-to-r from-indigo-700 via-indigo-950 to-indigo-700 text-transparent bg-clip-text capitalize">
+        <h1 className="text-black text-5xl sm:text-7xl md:text-8xl lg:9xl font-black flex flex-col items-center justify-between p-3 bg-gradient-to-r from-indigo-700 via-indigo-950 to-indigo-700 text-transparent bg-clip-text capitalize">
           Promptilia
           <br />
           <span className="text-xl p-2 mt-5 bg-gradient-to-r from-slate-600 via-slate-950 to-slate-600 text-transparent bg-clip-text">
@@ -25,6 +27,9 @@ const Home = () => {
           Just Log in and get started! Use it anywhere you want, you only need a
           WEB BROWSER.
         </p>
+        <div className="w-full flex items-center justify-center">
+          <Search />
+        </div>
       </section>
     </>
   );
