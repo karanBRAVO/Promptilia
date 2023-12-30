@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const SignIn = () => {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -29,13 +32,26 @@ const SignIn = () => {
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
       if (validate()) {
-        console.log(formData);
+        const res = await fetch(`/api/auth`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          router.push("/");
+        } else {
+          console.log("Failed to login/create.");
+        }
       } else {
         alert(`Fill correct details.`);
       }
@@ -87,6 +103,7 @@ const SignIn = () => {
                 placeholder="Username"
                 value={formData.username}
                 onChange={handleChange}
+                autoComplete="off"
                 className="rounded-md p-5 font-light m-2 text-blue-950 text-lg outline-orange-300 outline-double outline-2 bg-white placeholder:text-gray-400"
               />
             </div>
@@ -102,6 +119,7 @@ const SignIn = () => {
                 placeholder="abc@xyz.ky"
                 value={formData.email}
                 onChange={handleChange}
+                autoComplete="off"
                 className="rounded-md p-5 font-light m-2 text-blue-950 text-lg outline-orange-300 outline-double outline-2 bg-white placeholder:text-gray-400"
               />
             </div>
@@ -117,6 +135,7 @@ const SignIn = () => {
                 placeholder="########"
                 value={formData.password}
                 onChange={handleChange}
+                autoComplete="off"
                 className="rounded-md p-5 font-light m-2 text-blue-950 text-lg outline-orange-300 outline-double outline-2 bg-white placeholder:text-gray-400"
               />
             </div>
