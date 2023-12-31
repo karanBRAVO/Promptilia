@@ -8,6 +8,9 @@ export default function GlobalError({ error, reset }) {
           <h2 className="m-2 p-2 text-red-500 text-4xl font-black">
             Something went wrong!
           </h2>
+          <p className="text-black font-thin p-5 m-3 border-2 border-dashed border-blue-950">
+            {error}
+          </p>
           <button
             className="px-3 py-4 m-3 rounded-lg bg-blue-700 text-white text-lg"
             onClick={() => reset()}

@@ -1,12 +1,13 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Wait from "@app/ui/Wait";
+import NotFound from "@app/not-found";
 
 const Profile = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -14,12 +15,6 @@ const Profile = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!session?.user) {
-      router.replace("/");
-    }
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +59,13 @@ const Profile = () => {
   return (
     <>
       <section className="flex flex-col items-start p-5 bg-gradient-to-b from-white via-yellow-200 to-orange-200 w-full min-h-screen">
-        {session?.user ? (
+        {status === "loading" ? (
+          <Wait
+            msg={
+              "Checking if you are authorized to view this page or not. This will less than a minute."
+            }
+          />
+        ) : status === "authenticated" ? (
           <div className="p-1 w-full">
             <div className="flex flex-col items-start m-1">
               <h1 className="font-black text-4xl md:text-7xl capitalize bg-gradient-to-b from-red-200 via-red-400 to-red-700 text-transparent bg-clip-text">
@@ -160,11 +161,7 @@ const Profile = () => {
             </div>
           </div>
         ) : (
-          <Wait
-            msg={
-              "Checking if you are authorized to view this page or not. This will less than a minute."
-            }
-          />
+          <NotFound />
         )}
       </section>
     </>

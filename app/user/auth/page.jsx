@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
 import { useSession, signIn } from "next-auth/react";
 import Wait from "@app/ui/Wait";
+import NotFound from "@app/not-found";
 
 const providers = [
   { name: "Google", icon: FcGoogle },
@@ -13,14 +14,8 @@ const providers = [
 ];
 
 const SignIn = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
-
-  useEffect(() => {
-    if (session?.user) {
-      router.replace("/");
-    }
-  }, [session, router]);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -74,6 +69,21 @@ const SignIn = () => {
     }
   };
 
+  const handleSignInWithProviders = async (nameOfProvider) => {
+    let hasConfirmation = confirm(
+      `Are you sure you want to sign in with ${nameOfProvider}`
+    );
+    if (hasConfirmation) {
+      const res = await signIn("github", { redirect: false });
+      console.log(res);
+      if (res.ok) {
+        router.replace("/");
+      } else {
+        alert("[!] Error, Authorization failed.");
+      }
+    }
+  };
+
   return (
     <>
       <section className="flex flex-col items-center min-h-screen w-full bg-gradient-to-t from-yellow-100 via-orange-100 to-pink-100 text-base text-black">
@@ -83,7 +93,9 @@ const SignIn = () => {
             Promptilia
           </span>
         </h1>
-        {!session?.user?.email ? (
+        {status === "loading" ? (
+          <Wait msg={"Checking your previous login sessions"} />
+        ) : status === "unauthenticated" ? (
           <div className="flex flex-col items-center">
             <div className="flex flex-row m-2">
               <div className="flex flex-col items-center justify-between p-2">
@@ -179,6 +191,9 @@ const SignIn = () => {
                   <div
                     key={index}
                     className="flex flex-row rounded-lg shadow-lg items-center justify-center px-4 py-3 m-2 text-black font-medium bg-gradient-to-tl hover:bg-gradient-to-b from-slate-500 via-zinc-100 to-zinc-200 cursor-pointer space-x-1"
+                    onClick={() => {
+                      handleSignInWithProviders(provider.name);
+                    }}
                   >
                     <provider.icon className="text-2xl mx-1" />
                     <span>Continue with</span>
@@ -189,7 +204,7 @@ const SignIn = () => {
             </div>
           </div>
         ) : (
-          <Wait msg={"Checking your previous login sessions"} />
+          <NotFound />
         )}
       </section>
     </>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   GrYoutube,
   GrGithub,
@@ -26,22 +26,11 @@ const socialIcons = [
 ];
 
 const Nav = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const pathname = usePathname();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [toggleMenu, setToggleMenu] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    if (session?.user) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-    setLoading(false);
-  }, [session]);
+  const [loading, setLoading] = useState(false);
 
   const handleSignOut = async (e) => {
     e.preventDefault();
@@ -94,7 +83,7 @@ const Nav = () => {
                 </div>
                 <hr className="w-full h-1 bg-slate-900 m-1" />
                 <div>
-                  {isLoggedIn ? (
+                  {status == "authenticated" ? (
                     pathname === "/user/profile" ? (
                       <h1 className="text-2xl font-black bg-gradient-to-t from-indigo-400 via-blue-400 to-sky-400 text-transparent bg-clip-text">
                         My Profile
@@ -131,10 +120,10 @@ const Nav = () => {
                     <Link href={"/user/auth"}>
                       <button
                         type="button"
-                        disabled={loading}
+                        disabled={status == "loading"}
                         className="bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600 hover:from-blue-600 hover:via-blue-400 hover:to-blue-300 text-lg px-4 py-2 rounded-3xl text-white disabled:cursor-not-allowed flex items-center justify-between gap-1"
                       >
-                        {loading ? (
+                        {status == "loading" ? (
                           <>
                             <TbTruckLoading className="text-3xl" />
                             Loading
@@ -169,7 +158,7 @@ const Nav = () => {
               );
             })}
           </div>
-          {isLoggedIn ? (
+          {status == "authenticated" ? (
             pathname === "/user/profile" ? (
               <h1 className="text-2xl font-black bg-gradient-to-t from-indigo-400 via-blue-400 to-sky-400 text-transparent bg-clip-text">
                 My Profile
@@ -206,10 +195,10 @@ const Nav = () => {
             <Link href={"/user/auth"}>
               <button
                 type="button"
-                disabled={loading}
+                disabled={status == "loading"}
                 className="bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600 hover:from-blue-600 hover:via-blue-400 hover:to-blue-300 text-lg px-4 py-2 rounded-3xl text-white disabled:cursor-not-allowed flex items-center justify-between gap-1"
               >
-                {loading ? (
+                {status == "loading" ? (
                   <>
                     <TbTruckLoading className="text-3xl" />
                     Loading
