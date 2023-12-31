@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   GrYoutube,
   GrGithub,
@@ -14,6 +14,8 @@ import { PiHamburgerFill } from "react-icons/pi";
 import { IoIosCloseCircle } from "react-icons/io";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { useSession, signOut } from "next-auth/react";
+import { TbTruckLoading } from "react-icons/tb";
 
 const socialIcons = [
   { socialIcon: GrGithub, href: "" },
@@ -24,10 +26,29 @@ const socialIcons = [
 ];
 
 const Nav = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    if (session?.user) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+    setLoading(false);
+  }, [session]);
+
+  const handleSignOut = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    await signOut({ redirect: false, callbackUrl: "/" });
+    setLoading(false);
+  };
 
   return (
     <>
@@ -74,31 +95,53 @@ const Nav = () => {
                 <hr className="w-full h-1 bg-slate-900 m-1" />
                 <div>
                   {isLoggedIn ? (
-                    <div className="flex flex-col justify-between items-center gap-2">
-                      <Link href={""}>
+                    pathname === "/user/profile" ? (
+                      <h1 className="text-2xl font-black bg-gradient-to-t from-indigo-400 via-blue-400 to-sky-400 text-transparent bg-clip-text">
+                        My Profile
+                      </h1>
+                    ) : (
+                      <div className="flex flex-col justify-between items-center gap-2">
+                        <Link href={"/user/profile"}>
+                          <button
+                            type="button"
+                            disabled={loading}
+                            className="bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-600 hover:from-indigo-600 hover:via-indigo-400 hover:to-indigo-300 text-lg px-4 py-2 rounded-3xl text-white disabled:cursor-not-allowed"
+                          >
+                            Profile
+                          </button>
+                        </Link>
                         <button
                           type="button"
-                          className="bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-600 hover:from-indigo-600 hover:via-indigo-400 hover:to-indigo-300 text-lg px-4 py-2 rounded-3xl text-white"
+                          disabled={loading}
+                          className="bg-gradient-to-r from-pink-300 via-pink-400 to-pink-600 hover:from-pink-600 hover:via-pink-400 hover:to-pink-300 text-lg px-4 py-2 rounded-3xl text-white disabled:cursor-not-allowed flex items-center justify-between gap-1"
+                          onClick={handleSignOut}
                         >
-                          Profile
+                          {loading ? (
+                            <>
+                              <TbTruckLoading className="text-3xl" />
+                              Loading
+                            </>
+                          ) : (
+                            <>Sign out</>
+                          )}
                         </button>
-                      </Link>
-                      <Link href={""}>
-                        <button
-                          type="button"
-                          className="bg-gradient-to-r from-pink-300 via-pink-400 to-pink-600 hover:from-pink-600 hover:via-pink-400 hover:to-pink-300 text-lg px-4 py-2 rounded-3xl text-white"
-                        >
-                          Sign out
-                        </button>
-                      </Link>
-                    </div>
+                      </div>
+                    )
                   ) : (
                     <Link href={"/user/auth"}>
                       <button
                         type="button"
-                        className="bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600 hover:from-blue-600 hover:via-blue-400 hover:to-blue-300 text-lg px-4 py-2 rounded-3xl text-white"
+                        disabled={loading}
+                        className="bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600 hover:from-blue-600 hover:via-blue-400 hover:to-blue-300 text-lg px-4 py-2 rounded-3xl text-white disabled:cursor-not-allowed flex items-center justify-between gap-1"
                       >
-                        Sign in
+                        {loading ? (
+                          <>
+                            <TbTruckLoading className="text-3xl" />
+                            Loading
+                          </>
+                        ) : (
+                          <>Sign in</>
+                        )}
                       </button>
                     </Link>
                   )}
@@ -127,31 +170,53 @@ const Nav = () => {
             })}
           </div>
           {isLoggedIn ? (
-            <div className="flex flex-row items-center justify-between gap-2">
-              <Link href={""}>
+            pathname === "/user/profile" ? (
+              <h1 className="text-2xl font-black bg-gradient-to-t from-indigo-400 via-blue-400 to-sky-400 text-transparent bg-clip-text">
+                My Profile
+              </h1>
+            ) : (
+              <div className="flex flex-row items-center justify-between gap-2">
+                <Link href={"/user/profile"}>
+                  <button
+                    type="button"
+                    disabled={loading}
+                    className="bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-600 hover:from-indigo-600 hover:via-indigo-400 hover:to-indigo-300 text-lg px-4 py-2 rounded-3xl text-white disabled:cursor-not-allowed"
+                  >
+                    Profile
+                  </button>
+                </Link>
                 <button
                   type="button"
-                  className="bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-600 hover:from-indigo-600 hover:via-indigo-400 hover:to-indigo-300 text-lg px-4 py-2 rounded-3xl text-white"
+                  disabled={loading}
+                  className="bg-gradient-to-r from-pink-300 via-pink-400 to-pink-600 hover:from-pink-600 hover:via-pink-400 hover:to-pink-300 text-lg px-4 py-2 rounded-3xl text-white disabled:cursor-not-allowed flex items-center justify-between gap-1"
+                  onClick={handleSignOut}
                 >
-                  Profile
+                  {loading ? (
+                    <>
+                      <TbTruckLoading className="text-3xl" />
+                      Loading
+                    </>
+                  ) : (
+                    <>Sign out</>
+                  )}
                 </button>
-              </Link>
-              <Link href={""}>
-                <button
-                  type="button"
-                  className="bg-gradient-to-r from-pink-300 via-pink-400 to-pink-600 hover:from-pink-600 hover:via-pink-400 hover:to-pink-300 text-lg px-4 py-2 rounded-3xl text-white"
-                >
-                  Sign out
-                </button>
-              </Link>
-            </div>
+              </div>
+            )
           ) : (
             <Link href={"/user/auth"}>
               <button
                 type="button"
-                className="bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600 hover:from-blue-600 hover:via-blue-400 hover:to-blue-300 text-lg px-4 py-2 rounded-3xl text-white"
+                disabled={loading}
+                className="bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600 hover:from-blue-600 hover:via-blue-400 hover:to-blue-300 text-lg px-4 py-2 rounded-3xl text-white disabled:cursor-not-allowed flex items-center justify-between gap-1"
               >
-                Sign in
+                {loading ? (
+                  <>
+                    <TbTruckLoading className="text-3xl" />
+                    Loading
+                  </>
+                ) : (
+                  <>Sign in</>
+                )}
               </button>
             </Link>
           )}

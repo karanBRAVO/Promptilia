@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
+import { useSession, signIn } from "next-auth/react";
 
 const providers = [
   { name: "Google", icon: FcGoogle },
@@ -11,7 +12,14 @@ const providers = [
 ];
 
 const SignIn = () => {
+  const { data: session } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (session?.user) {
+      router.replace("/");
+    }
+  }, [session, router]);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -45,25 +53,21 @@ const SignIn = () => {
 
     try {
       if (validate()) {
-        const res = await fetch(`/api/auth`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+        const res = await signIn("username_email_password", {
+          redirect: false,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
         });
-        const data = await res.json();
 
-        if (data.success) {
-          router.push("/");
+        if (res?.ok) {
+          router.replace("/");
         } else {
-          console.log("Failed to login/create.");
+          alert("[!] Error, Invalid Details.");
         }
-      } else {
-        alert(`Fill correct details.`);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error:", err);
     } finally {
       setSubmitting(false);
     }
