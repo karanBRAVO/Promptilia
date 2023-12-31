@@ -31,7 +31,7 @@ export const handleSignIn = async ({ username, email, password }) => {
     await new authModel({
       email,
       password: bcrypt.hashSync(password, 10),
-      username,
+      username: String(username).toLowerCase(),
     }).save();
 
     const newUser = await authModel.findOne({ username, email });

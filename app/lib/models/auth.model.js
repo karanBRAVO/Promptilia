@@ -20,7 +20,8 @@ const authSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: "https://next-auth.js.org/img/logo/logo-sm.png",
+      default:
+        "https://upload.wikimedia.org/wikipedia/commons/5/50/User_icon-cp.svg",
     },
   },
   { timestamps: true }

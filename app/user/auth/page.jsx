@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
 import { useSession, signIn } from "next-auth/react";
+import Wait from "@app/ui/Wait";
 
 const providers = [
   { name: "Google", icon: FcGoogle },
@@ -82,102 +83,114 @@ const SignIn = () => {
             Promptilia
           </span>
         </h1>
-        <div className="flex flex-row m-2">
-          <div className="flex flex-col items-center justify-between p-2">
-            <span className="font-extralight text-sm text-black">
-              Don't have an account?
-            </span>
-            <span className="font-black text-4xl text-black">Create</span>
-          </div>
-          <div className="top-0 bottom-0 p-1 bg-black relative rounded-lg"></div>
-          <div className="flex flex-col items-center justify-between p-2">
-            <span className="font-extralight text-sm text-black">
-              Already have an account.
-            </span>
-            <span className="font-black text-4xl text-black">Login</span>
-          </div>
-        </div>
-        <div className="m-1">
-          <form
-            onSubmit={handleSubmit}
-            className="px-5 py-3 m-2 rounded-xl shadow-md text-base"
-          >
-            <div className="flex flex-col items-start justify-between">
-              <label htmlFor="username" className="text-black font-extralight">
-                Username
-              </label>
-              <input
-                type="text"
-                name="username"
-                id="username"
-                required
-                placeholder="Username"
-                value={formData.username}
-                onChange={handleChange}
-                autoComplete="off"
-                className="rounded-md p-5 font-light m-2 text-blue-950 text-lg outline-orange-300 outline-double outline-2 bg-white placeholder:text-gray-400"
-              />
-            </div>
-            <div className="flex flex-col items-start justify-between">
-              <label htmlFor="email" className="text-black font-extralight">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                required
-                placeholder="abc@xyz.ky"
-                value={formData.email}
-                onChange={handleChange}
-                autoComplete="off"
-                className="rounded-md p-5 font-light m-2 text-blue-950 text-lg outline-orange-300 outline-double outline-2 bg-white placeholder:text-gray-400"
-              />
-            </div>
-            <div className="flex flex-col items-start justify-between">
-              <label htmlFor="password" className="text-black font-extralight">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                required
-                placeholder="########"
-                value={formData.password}
-                onChange={handleChange}
-                autoComplete="off"
-                className="rounded-md p-5 font-light m-2 text-blue-950 text-lg outline-orange-300 outline-double outline-2 bg-white placeholder:text-gray-400"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="px-3 py-4 w-full bg-gradient-to-tr from-orange-300 to-yellow-500 rounded-md shadow-md shadow-slate-300 font-black text-red-950 disabled:cursor-not-allowed"
-            >
-              {submitting ? <>Submitting...</> : <>Submit</>}
-            </button>
-          </form>
-          <div className="flex flex-row items-center justify-between gap-1 text-black font-thin text-xl">
-            <hr className="w-full h-[2.1px] bg-black" />
-            <span className="mb-1">or</span>
-            <hr className="w-full h-[2.1px] bg-black" />
-          </div>
-        </div>
-        <div className="flex items-center justify-evenly flex-col md:flex-row">
-          {providers.map((provider, index) => {
-            return (
-              <div
-                key={index}
-                className="flex flex-row rounded-lg shadow-lg items-center justify-center px-4 py-3 m-2 text-black font-medium bg-gradient-to-tl hover:bg-gradient-to-b from-slate-500 via-zinc-100 to-zinc-200 cursor-pointer space-x-1"
-              >
-                <provider.icon className="text-2xl mx-1" />
-                <span>Continue with</span>
-                <span>{provider.name}</span>
+        {!session?.user?.email ? (
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row m-2">
+              <div className="flex flex-col items-center justify-between p-2">
+                <span className="font-extralight text-sm text-black">
+                  Don't have an account?
+                </span>
+                <span className="font-black text-4xl text-black">Create</span>
               </div>
-            );
-          })}
-        </div>
+              <div className="top-0 bottom-0 p-1 bg-black relative rounded-lg"></div>
+              <div className="flex flex-col items-center justify-between p-2">
+                <span className="font-extralight text-sm text-black">
+                  Already have an account.
+                </span>
+                <span className="font-black text-4xl text-black">Login</span>
+              </div>
+            </div>
+            <div className="m-1">
+              <form
+                onSubmit={handleSubmit}
+                className="px-5 py-3 m-2 rounded-xl shadow-md text-base"
+              >
+                <div className="flex flex-col items-start justify-between">
+                  <label
+                    htmlFor="username"
+                    className="text-black font-extralight"
+                  >
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    required
+                    placeholder="Username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    className="rounded-md p-5 font-light m-2 text-blue-950 text-lg outline-orange-300 outline-double outline-2 bg-white placeholder:text-gray-400"
+                  />
+                </div>
+                <div className="flex flex-col items-start justify-between">
+                  <label htmlFor="email" className="text-black font-extralight">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    required
+                    placeholder="abc@xyz.ky"
+                    value={formData.email}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    className="rounded-md p-5 font-light m-2 text-blue-950 text-lg outline-orange-300 outline-double outline-2 bg-white placeholder:text-gray-400"
+                  />
+                </div>
+                <div className="flex flex-col items-start justify-between">
+                  <label
+                    htmlFor="password"
+                    className="text-black font-extralight"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    required
+                    placeholder="########"
+                    value={formData.password}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    className="rounded-md p-5 font-light m-2 text-blue-950 text-lg outline-orange-300 outline-double outline-2 bg-white placeholder:text-gray-400"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-3 py-4 w-full bg-gradient-to-tr from-orange-300 to-yellow-500 rounded-md shadow-md shadow-slate-300 font-black text-red-950 disabled:cursor-not-allowed"
+                >
+                  {submitting ? <>Submitting...</> : <>Submit</>}
+                </button>
+              </form>
+              <div className="flex flex-row items-center justify-between gap-1 text-black font-thin text-xl">
+                <hr className="w-full h-[2.1px] bg-black" />
+                <span className="mb-1">or</span>
+                <hr className="w-full h-[2.1px] bg-black" />
+              </div>
+            </div>
+            <div className="flex items-center justify-evenly flex-col md:flex-row">
+              {providers.map((provider, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex flex-row rounded-lg shadow-lg items-center justify-center px-4 py-3 m-2 text-black font-medium bg-gradient-to-tl hover:bg-gradient-to-b from-slate-500 via-zinc-100 to-zinc-200 cursor-pointer space-x-1"
+                  >
+                    <provider.icon className="text-2xl mx-1" />
+                    <span>Continue with</span>
+                    <span>{provider.name}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <Wait msg={"Checking your previous login sessions"} />
+        )}
       </section>
     </>
   );
