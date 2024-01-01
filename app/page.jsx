@@ -1,6 +1,11 @@
+"use client";
+
 import Search from "./ui/Search";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
+  const router = useRouter();
+
   return (
     <>
       <section className="bg-gradient-to-t from-indigo-950 w-full min-h-screen flex flex-col items-center">
@@ -28,7 +33,11 @@ const Home = () => {
           WEB BROWSER.
         </p>
         <div className="w-full flex items-center justify-center">
-          <Search />
+          <Search
+            clickEvent={(searchValue) => {
+              if (searchValue) router.push(`/user/prompt`);
+            }}
+          />
         </div>
       </section>
     </>
