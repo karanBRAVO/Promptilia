@@ -74,12 +74,16 @@ const SignIn = () => {
       `Are you sure you want to sign in with ${nameOfProvider}`
     );
     if (hasConfirmation) {
-      const res = await signIn("github", { redirect: false });
-      console.log(res);
-      if (res.ok) {
+      let res = undefined;
+
+      if (String(nameOfProvider).toLowerCase() === "github") {
+        res = await signIn("github", { redirect: false });
+      } else if (String(nameOfProvider).toLowerCase() === "google") {
+        res = await signIn("google", { redirect: false });
+      }
+
+      if (res?.url) {
         router.replace("/");
-      } else {
-        alert("[!] Error, Authorization failed.");
       }
     }
   };

@@ -34,6 +34,8 @@ const authOptions = {
             username: credentials.username,
             email: credentials.email,
             password: credentials.password,
+            image: undefined,
+            method: "credentials",
           });
 
           if (res.success) {
@@ -49,6 +51,32 @@ const authOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      if (account?.provider == "username_email_password") {
+        return true;
+      }
+      if (account?.provider == "github" || account?.provider == "google") {
+        const res = await handleSignIn({
+          username: user.name,
+          email: user.email,
+          password: "",
+          image: user.image,
+          method: "oauthprovider",
+        });
+
+        if (res?.success) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
+    },
+    async jwt({ token, user }) {
+      return token;
+    },
     async session({ session, token, user }) {
       return session;
     },
