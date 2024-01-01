@@ -15,6 +15,7 @@ const authSchema = new mongoose.Schema(
     },
     username: {
       type: String,
+      lowercase: true,
       required: [true, "Username is required."],
       trim: true,
     },
@@ -22,6 +23,13 @@ const authSchema = new mongoose.Schema(
       type: String,
       default:
         "https://upload.wikimedia.org/wikipedia/commons/5/50/User_icon-cp.svg",
+    },
+    method: {
+      type: String,
+      lowercase: true,
+      enum: ["credentials", "oauthprovider"],
+      trim: true,
+      required: [true, "Method is required"],
     },
   },
   { timestamps: true }

@@ -20,6 +20,11 @@ export const handleSignIn = async ({
     // login user if exists
     const user = await authModel.findOne({ username, email });
     if (user) {
+      // matching previous method and current method of authentication
+      if (method !== user.method) {
+        throw new Error(`Authentication method ${method}`);
+      }
+
       // checking which method user is using
       if (method === "credentials") {
         // comparing the password
@@ -43,7 +48,7 @@ export const handleSignIn = async ({
     }
 
     // generating new password if not provided
-    if (!password) {
+    if (method !== "credentials" && !password) {
       password = crypto.randomBytes(16).toString("hex");
     }
 
@@ -55,6 +60,7 @@ export const handleSignIn = async ({
       password: bcrypt.hashSync(password, 10),
       username,
       image,
+      method,
     }).save();
 
     const newUser = await authModel.findOne({ username, email });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Wait from "@app/ui/Wait";
@@ -45,12 +45,36 @@ const Profile = () => {
     return true;
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    if (validate()) {
-      // update
+    if (validate() && confirm("Are you sure you want to update?")) {
+      try {
+        const res = await fetch(`/api/user/updateProfile`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formData.name,
+            password: formData.password,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (data.success && status === "authenticated") {
+          await signIn("username_email_password", {
+            redirect: false,
+            username: formData.name,
+            email: session?.user?.email,
+            password: formData.password,
+          });
+        } else {
+          alert("Error " + data.error);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     setLoading(false);

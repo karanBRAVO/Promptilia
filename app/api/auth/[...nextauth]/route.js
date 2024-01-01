@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { handleSignIn } from "@app/lib/user/handleSignIn";
 
-const authOptions = {
+export const authOptions = {
   providers: [
     GithubProvider({
       id: "github",
