@@ -3,13 +3,16 @@
 import { useState } from "react";
 import { PiEyeClosedBold, PiEyeBold } from "react-icons/pi";
 import { BiSolidLike, BiSolidDislike, BiCommentDetail } from "react-icons/bi";
+import Link from "next/link";
 
 const PromptCard = ({
+  id = "",
   name = "Name",
   email = "abc@xyz.ky",
   image = "/profileDefault.webp",
   text = "Prompt Response",
   numberOfLetters = 100,
+  dated = "01-02-2024 Tuesday",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,16 +26,17 @@ const PromptCard = ({
               alt="Profile Pic"
               width={45}
               height={50}
-              className="rounded-full w-12 h-12 mx-1 shadow-md shadow-pink-50"
+              className="rounded-full w-8 h-8 md:w-12 md:h-12 mx-1 shadow-md shadow-pink-50"
             />
             <div className="flex flex-col">
-              <span className="text-zinc-950 font-thin text-sm capitalize">
+              <span className="text-zinc-950 font-bold text-sm capitalize">
                 {name}
               </span>
               <span className="text-zinc-950 font-thin text-xs">{email}</span>
+              <span className="text-xs font-thin text-black">{dated}</span>
             </div>
           </div>
-          <div className="m-1">
+          <div className="m-1 flex flex-row items-center justify-between">
             {isOpen ? (
               <PiEyeClosedBold
                 className="cursor-pointer text-lg mx-1"
@@ -71,10 +75,9 @@ const PromptCard = ({
             className="text-xl text-black font-black mx-1 hover:text-pink-700 cursor-pointer"
             onClick={() => {}}
           />
-          <BiCommentDetail
-            className="text-xl text-black font-black mx-1 hover:text-pink-700 cursor-pointer"
-            onClick={() => {}}
-          />
+          <Link href={`/user/prompt/comments/${id}`}>
+            <BiCommentDetail className="text-xl text-black font-black mx-1 hover:text-pink-700 cursor-pointer" />
+          </Link>
         </div>
       </div>
     </>
